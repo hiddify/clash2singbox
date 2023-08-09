@@ -67,6 +67,7 @@ func vmess(p *clash.Proxies, s *singbox.SingBoxOut) error {
 }
 
 func vless(p *clash.Proxies, s *singbox.SingBoxOut) error {
+	
 	err := vmess(p, s)
 	if err != nil {
 		return fmt.Errorf("vless: %w", err)
@@ -82,8 +83,10 @@ func vless(p *clash.Proxies, s *singbox.SingBoxOut) error {
 		}
 		s.Flow = p.Flow
 	}
-	if p.RealityOpts.ShortId != "" {
-		s.TLS=&singbox.SingTLS{}
+	if p.RealityOpts.PublicKey != "" {
+		if s.TLS == nil {
+			s.TLS = &singbox.SingTLS{}
+		}
 		s.TLS.Reality = &singbox.SingReality{}
 		s.TLS.Reality.Enabled = true
 		s.TLS.Reality.PublicKey = p.RealityOpts.PublicKey
